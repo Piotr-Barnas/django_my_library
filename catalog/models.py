@@ -45,6 +45,11 @@ class Book(models.Model):
         """Returns the url to access a detail record for this book."""
         return reverse('book-detail', args=[str(self.id)])
 
+    def display_genre(self):
+        """Create a string in Genre - used to display genre in Admin"""
+        return ', '.join(genre.name for genre in self.genre.all()[:3])
+
+    display_genre.short_description = 'Genre'
 
 class BookInstance(models.Model):
     """Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""
@@ -74,6 +79,10 @@ class BookInstance(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.id} ({self.book.title})'
+
+    def display_book(self):
+        """Creates a string of books' title and author - used in Admin site."""
+        return f'{self.book.title} - {self.book.author}' 
 
 
 class Author(models.Model):
