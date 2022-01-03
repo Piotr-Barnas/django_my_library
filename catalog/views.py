@@ -11,11 +11,24 @@ def index(request):
     num_available = BookInstance.objects.filter(status__exact='a').count()
     num_authors = Author.objects.count()
 
+    num_genres = Genre.objects.all().count()
+    num_the = Book.objects.filter(title__icontains='the').count()
+    #num_novel = BookInstance.objects.filter(book__in=Book.objects.all().filter(genre__name='Novel')).count()
+    num_novel = BookInstance.objects.filter(book__genre__name='Novel').count()
+    num_novels_av = BookInstance.objects.filter(
+            book__genre__name='Novel',
+            status__exact='a'
+            ).count()
+
     context = {
         'num_books': num_books,
         'num_instances': num_instances,
         'num_available': num_available,
         'num_authors': num_authors,
+        'num_genres': num_genres,
+        'num_the': num_the,
+        'num_novel': num_novel,
+        'num_novels_available': num_novels_av,
     }
 
     """
