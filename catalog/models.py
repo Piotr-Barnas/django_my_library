@@ -1,3 +1,4 @@
+from re import split
 from django.db import models
 from django.db.models.fields import CharField
 from django.urls import reverse
@@ -49,6 +50,15 @@ class Book(models.Model):
         """Create a string in Genre - used to display genre in Admin"""
         return ', '.join(genre.name for genre in self.genre.all()[:3])
 
+    def shorten_summary(self):
+        """Creates a shortened version of summary."""
+        if len(self.summary.split(' ')) > 55:
+            return ' '.join(self.summary.split(' ')[:50]) + '...'
+        else:
+            return self.summary
+
+         
+
     display_genre.short_description = 'Genre'
 
 class BookInstance(models.Model):
@@ -95,7 +105,7 @@ class Author(models.Model):
     class Meta:
         ordering = ['last_name', 'first_name']
 
-    def get_absoulte_url(self):
+    def get_absolute_url(self):
         """Returns the url to access a particular author instance."""
         return reverse('author-detail', args=[str(self.id)])
 
